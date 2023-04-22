@@ -3,7 +3,6 @@
 using TODO_APP;
 using System;
 
-DatabaseSQL myDataBase = new DatabaseSQL();
-myDataBase.CheckSpecificData(2);
+Render.MainMenu();
 
 Console.ReadKey();

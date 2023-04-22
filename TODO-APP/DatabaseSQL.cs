@@ -14,6 +14,15 @@ namespace TODO_APP
             Console.WriteLine("Database Connection Done");
         }
 
+        private void InsertNewNote(string title, string text)
+        {
+            string query = $"INSERT INTO notes (title, text) VALUES (@title, @text)";
+            using (SQLiteCommand cmd = new SQLiteCommand(query, myConnection)
+            {
+                return
+            }
+        }
+
         public void InsertData()
         {
             string query = "INSERT INTO user (name) VALUES (@name)";
