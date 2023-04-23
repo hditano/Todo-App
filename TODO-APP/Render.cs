@@ -58,7 +58,8 @@ namespace TODO_APP
         {
             Console.Write("Which one would you like to update: ");
             string? noteAuthor = Console.ReadLine();
-            DatabaseSQL.PrintSpecificData(noteAuthor);
+            DatabaseSQL.UpdateNote(noteAuthor);
+            
             
         }
 

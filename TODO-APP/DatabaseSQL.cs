@@ -19,7 +19,7 @@ namespace TODO_APP
 
         public static DatabaseSQL GetInstance()
         {
-            if(_instance == null)
+            if (_instance == null)
             {
                 _instance = new DatabaseSQL();
             }
@@ -47,27 +47,39 @@ namespace TODO_APP
             GetInstance().myConnection.Open();
             SQLiteDataReader reader = cmd.ExecuteReader();
 
-            Console.WriteLine("Id | Author | Title");
-            while(reader.Read())
+            Console.WriteLine("Author | Title");
+            while (reader.Read())
             {
-                Console.WriteLine($"{reader["id"]} | {reader["author"]} | {reader["title"]}");
+                Console.WriteLine($"{reader["author"]} | {reader["title"]}");
             }
             GetInstance().myConnection.Close();
         }
 
         public static void PrintSpecificData(string name)
         {
-            string query = $"SELECT user.name AS author, notes.title AS title, notes.text AS text, notes.color AS color FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE author=@author";
+            string query = $"SELECT user.id AS index, user.name AS author, notes.title AS title, notes.text AS text, notes.color AS color FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE author=@author";
             SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
             GetInstance().myConnection.Open();
             cmd.Parameters.AddWithValue("@author", name);
-            SQLiteDataReader reader =  cmd.ExecuteReader();
+            SQLiteDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 Console.WriteLine($"{reader["author"]} {reader["title"]} {reader["text"]} {reader["color"]}");
             }
             GetInstance().myConnection.Close();
-            
+        }
+
+        public static void UpdateNote(string noteIndex)
+        {
+            string query = $"SELECT notes.id AS id, user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id={noteIndex}";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine($"{reader["id"]} {reader["author"]} {reader["title"]}");
+            }
+            GetInstance().myConnection.Close();
         }
 
         public static void DeleteNote(string noteIndex)
@@ -82,3 +94,4 @@ namespace TODO_APP
 
     }
 }
+
