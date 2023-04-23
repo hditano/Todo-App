@@ -28,6 +28,8 @@ namespace TODO_APP
             {
                 case 1: AddNote();
                     break;
+                case 2: UpdateNote();
+                    break;
                 case 3: DeleteNote();
                     break;
                 case 4: DatabaseSQL.PrintData();
@@ -50,6 +52,14 @@ namespace TODO_APP
             string? noteAuthor = Console.ReadLine();
             DatabaseSQL.InsertNewNote(new Notes(noteAuthor, noteTitle, noteText, noteColor));
 
+        }
+
+        public static void UpdateNote()
+        {
+            Console.Write("Which one would you like to update: ");
+            string? noteAuthor = Console.ReadLine();
+            DatabaseSQL.PrintSpecificData(noteAuthor);
+            
         }
 
         public static void DeleteNote()

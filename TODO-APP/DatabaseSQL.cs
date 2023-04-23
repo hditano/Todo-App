@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SQLite;
+using System.Data.SqlTypes;
 using System.Security.Cryptography;
 
 namespace TODO_APP
@@ -41,7 +42,7 @@ namespace TODO_APP
 
         public static void PrintData()
         {
-            string query = "SELECT notes.id AS id, user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id=notes.userid";
+            string query = "SELECT user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id=notes.userid";
             SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
             GetInstance().myConnection.Open();
             SQLiteDataReader reader = cmd.ExecuteReader();
@@ -52,6 +53,21 @@ namespace TODO_APP
                 Console.WriteLine($"{reader["id"]} | {reader["author"]} | {reader["title"]}");
             }
             GetInstance().myConnection.Close();
+        }
+
+        public static void PrintSpecificData(string name)
+        {
+            string query = $"SELECT user.name AS author, notes.title AS title, notes.text AS text, notes.color AS color FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE author=@author";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
+            cmd.Parameters.AddWithValue("@author", name);
+            SQLiteDataReader reader =  cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine($"{reader["author"]} {reader["title"]} {reader["text"]} {reader["color"]}");
+            }
+            GetInstance().myConnection.Close();
+            
         }
 
         public static void DeleteNote(string noteIndex)
