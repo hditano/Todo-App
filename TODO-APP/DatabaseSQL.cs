@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.Data.SqlTypes;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 
 namespace TODO_APP
@@ -55,21 +56,7 @@ namespace TODO_APP
             GetInstance().myConnection.Close();
         }
 
-        public static void PrintSpecificData(string name)
-        {
-            string query = $"SELECT user.id AS index, user.name AS author, notes.title AS title, notes.text AS text, notes.color AS color FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE author=@author";
-            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
-            GetInstance().myConnection.Open();
-            cmd.Parameters.AddWithValue("@author", name);
-            SQLiteDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                Console.WriteLine($"{reader["author"]} {reader["title"]} {reader["text"]} {reader["color"]}");
-            }
-            GetInstance().myConnection.Close();
-        }
-
-        public static void UpdateNote(string noteIndex)
+        public static void SelectSpecificID(string noteIndex)
         {
             string query = $"SELECT notes.id AS id, user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id={noteIndex}";
             SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
@@ -79,6 +66,18 @@ namespace TODO_APP
             {
                 Console.WriteLine($"{reader["id"]} {reader["author"]} {reader["title"]}");
             }
+            GetInstance().myConnection.Close();
+        }
+
+        public static void UpdateNote(string updateNote, string id)
+        {
+            string query = "UPDATE notes SET text=@updateNote WHERE id=@id";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
+            cmd.Parameters.AddWithValue("@updateNote", updateNote);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine($"Note Updated");
             GetInstance().myConnection.Close();
         }
 
