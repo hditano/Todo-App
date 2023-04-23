@@ -28,6 +28,8 @@ namespace TODO_APP
             {
                 case 1: AddNote();
                     break;
+                case 3: DeleteNote();
+                    break;
                 case 4: DatabaseSQL.PrintData();
                     break;
                 case 0:
@@ -49,6 +51,14 @@ namespace TODO_APP
             DatabaseSQL.InsertNewNote(new Notes(noteAuthor, noteTitle, noteText, noteColor));
 
         }
+
+        public static void DeleteNote()
+        {
+            Console.Write($"Which note would you like to delete: ");
+            string? reply = Convert.ToString(Console.ReadLine());
+            DatabaseSQL.DeleteNote(reply);
+        }
+
 
 
     }

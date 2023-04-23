@@ -41,16 +41,26 @@ namespace TODO_APP
 
         public static void PrintData()
         {
-            string query = "SELECT user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id=notes.userid";
+            string query = "SELECT notes.id AS id, user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id=notes.userid";
             SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
             GetInstance().myConnection.Open();
             SQLiteDataReader reader = cmd.ExecuteReader();
 
-            Console.WriteLine("Author | Title");
+            Console.WriteLine("Id | Author | Title");
             while(reader.Read())
             {
-                Console.WriteLine($"{reader["author"]} | {reader["title"]}");
+                Console.WriteLine($"{reader["id"]} | {reader["author"]} | {reader["title"]}");
             }
+            GetInstance().myConnection.Close();
+        }
+
+        public static void DeleteNote(string noteIndex)
+        {
+            string query = $"DELETE FROM notes WHERE id={noteIndex}";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
+            cmd.ExecuteNonQuery();
+            Console.WriteLine($"Note {noteIndex} deleted");
             GetInstance().myConnection.Close();
         }
 
