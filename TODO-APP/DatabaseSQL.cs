@@ -39,32 +39,20 @@ namespace TODO_APP
             GetInstance().myConnection.Close();
         }
 
-        public void PrintData()
+        public static void PrintData()
         {
-            string query = "SELECT name FROM user";
-            SQLiteCommand cmd = new SQLiteCommand(query, myConnection);
-            myConnection.Open();
+            string query = "SELECT user.name AS author, notes.title AS title FROM notes LEFT OUTER JOIN user ON user.id=notes.userid WHERE user.id=notes.userid";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
             SQLiteDataReader reader = cmd.ExecuteReader();
+
+            Console.WriteLine("Author | Title");
             while(reader.Read())
             {
-                Console.WriteLine($"{reader["name"]}");
+                Console.WriteLine($"{reader["author"]} | {reader["title"]}");
             }
-            myConnection.Close();
+            GetInstance().myConnection.Close();
         }
 
-        public void CheckSpecificData(int text)
-        {
-            string query = "SELECT id, name FROM user WHERE ID = @ID ";
-            SQLiteCommand cmd = new SQLiteCommand(query, myConnection);
-            Console.WriteLine("Type your id");
-            int reply = Convert.ToInt32(Console.ReadLine());
-            cmd.Parameters.AddWithValue("@ID", reply);
-            myConnection.Open();
-            SQLiteDataReader reader = cmd.ExecuteReader();
-            while(reader.Read())
-            {
-                Console.WriteLine($"{reader["name"]}");
-            }
-        }
     }
 }

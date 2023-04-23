@@ -9,18 +9,10 @@ namespace TODO_APP
     internal class Render
     {
 
-        public DataManager _newData;
-
-        public Render()
-        {
-            _newData = new DataManager();
-
-        }
-
         public static void MainMenu()
         {
             int index = 1;
-            List<string> menuList = new List<string>() { "Add a new note", "Update a note", "Delete a note" };
+            List<string> menuList = new List<string>() { "Add a new note", "Update a note", "Delete a note", "Show Notes" };
 
             Console.WriteLine("--------- ToDo-App ---------");
             foreach (string i in menuList)
@@ -35,6 +27,8 @@ namespace TODO_APP
             switch (reply)
             {
                 case 1: AddNote();
+                    break;
+                case 4: DatabaseSQL.PrintData();
                     break;
                 case 0:
                     break;
@@ -55,6 +49,7 @@ namespace TODO_APP
             DatabaseSQL.InsertNewNote(new Notes(noteAuthor, noteTitle, noteText, noteColor));
 
         }
+
 
     }
 }
