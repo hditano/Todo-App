@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Data.SQLite;
+using System.Security.Cryptography;
 
 namespace TODO_APP
 {
     internal class DatabaseSQL
     {
+        private static DatabaseSQL? _instance;
         public SQLiteConnection myConnection;
 
         public DatabaseSQL()
@@ -14,24 +16,27 @@ namespace TODO_APP
             Console.WriteLine("Database Connection Done");
         }
 
-        private void InsertNewNote(string title, string text)
+        public static DatabaseSQL GetInstance()
         {
-            string query = $"INSERT INTO notes (title, text) VALUES (@title, @text)";
-            using (SQLiteCommand cmd = new SQLiteCommand(query, myConnection)
+            if(_instance == null)
             {
-                return
+                _instance = new DatabaseSQL();
             }
+
+            return _instance;
         }
 
-        public void InsertData()
+        public static void InsertNewNote(Notes note)
         {
-            string query = "INSERT INTO user (name) VALUES (@name)";
-            SQLiteCommand cmd = new SQLiteCommand(query, myConnection);
-            myConnection.Open();
-            cmd.Parameters.AddWithValue("@name", "Hernan");
-            var data = cmd.ExecuteNonQuery();
-            Console.WriteLine("Rows Added: {0}", data);
-            myConnection.Close();
+            string query = $"INSERT INTO notes (userid, color,  title, text) VALUES ((SELECT id FROM user WHERE name = @userid),@color, @title, @text)";
+            SQLiteCommand cmd = new SQLiteCommand(query, GetInstance().myConnection);
+            GetInstance().myConnection.Open();
+            cmd.Parameters.AddWithValue("@userid", $"{note._name}");
+            cmd.Parameters.AddWithValue("@title", $"{note._title}");
+            cmd.Parameters.AddWithValue("@text", $"{note._text}");
+            cmd.Parameters.AddWithValue("@color", $"{note._color}");
+            cmd.ExecuteNonQuery();
+            GetInstance().myConnection.Close();
         }
 
         public void PrintData()

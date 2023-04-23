@@ -5,6 +5,7 @@
         Yellow,
         Green,
         Blue,
-        Magnet
+        Magnet,
+        black
     }
 }

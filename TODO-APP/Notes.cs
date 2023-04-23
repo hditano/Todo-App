@@ -9,14 +9,17 @@ namespace TODO_APP
     internal class Notes
     {
         public int Id { get; set; }
-        public Colors Color { get; set; }
-        public string Title { get; set; }
-        public string Text { get; set; }
+        public string _name { get; set; }
+        public Colors? _color { get; set; }
+        public string _title { get; set; }
+        public string _text { get; set; }
 
-        public Notes(string title, string text)
+        public Notes(string name, string title, string text, Colors color = Colors.black)
         {
-            Title = title;
-            Text = text;
+            _name = name;
+            _color = color;
+            _title = title;
+            _text = text;
         }
     }
 }
